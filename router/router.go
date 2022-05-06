@@ -8,10 +8,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func Router() *mux.Router {
+// create router with routes
+func CreateRouter() *mux.Router {
 
+	// Create a mux router
 	router := mux.NewRouter()
 
+	// Register routes
 	router.HandleFunc("/get_data", middleware.GetData).Methods("GET")
 	router.HandleFunc("/put_data", middleware.PutDataPost).Methods("POST")
 	router.HandleFunc("/put_data", middleware.PutDataGet).Methods("GET")
