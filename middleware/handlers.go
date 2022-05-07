@@ -51,7 +51,7 @@ func PutDataPost(w http.ResponseWriter, r *http.Request) {
 
 	var data models.Data
 
-	err := r.ParseMultipartForm(MAX_FORM_SIZE) 
+	err := r.ParseForm() 
 	if err != nil {
 		log.Fatalf("Failed to parse form with error: %v", err)
 	}
