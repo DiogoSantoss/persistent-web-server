@@ -26,12 +26,8 @@ func main() {
 	log.Printf("Running server on localhost%s\n", PORT)
 
 	// Listens for TCP connections on PORT
-	log.Fatal(http.ListenAndServe(PORT, r))
+	err := http.ListenAndServe(PORT, r)
+	if err != nil {
+		log.Fatalf("Failed to start server with error: %v\n",err)
+	}
 }
-
-// TODOS:
-// - When printing Data, gorm.Model appears null (ideally gorms.Model params dont show)
-// - Add error handling
-// - Add documentation
-// OPTIONAL:
-// - Add tests

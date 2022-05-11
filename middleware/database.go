@@ -34,6 +34,8 @@ func CreateConnection() *gorm.DB {
 	// Open connection to database
 	db, err = gorm.Open(dialect, "host="+host+" port="+port+" user="+user+" dbname="+dbName+" password="+password)
 	if err != nil {
+		// If ssl error occurs, try disabling ssl
+		// by adding sslmode=disable to the connection string
 		log.Fatal(err)
 	} else {
 		log.Println("Connected to database at " + host + ":" + port)

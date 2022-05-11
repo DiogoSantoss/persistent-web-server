@@ -23,8 +23,6 @@ func GetData(w http.ResponseWriter, r *http.Request) {
 
 	var data = getDataDatabase()
 
-	log.Println(data)
-
 	// Concat all data into a single struct
 	var allData models.AggregateData
 	for _, d := range data {
@@ -40,7 +38,12 @@ func GetData(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// send response
-	json.NewEncoder(w).Encode(res)
+	err := json.NewEncoder(w).Encode(res)
+	if err != nil {
+		log.Printf("Failed to encode response with error: %v\n", err)
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+		return
+	}
 	
 	// log response
 	log.Printf("Sent %v entries from database\n", len(data))
@@ -51,14 +54,18 @@ func PutDataPost(w http.ResponseWriter, r *http.Request) {
 
 	var data models.Data
 
-	err := r.ParseForm() 
+	err := r.ParseForm()
 	if err != nil {
-		log.Fatalf("Failed to parse form with error: %v", err)
+		log.Printf("Failed to parse form with error: %v\n", err)
+		http.Error(w, "Failed to parse form", http.StatusInternalServerError)
+		return
 	}
 
 	err = decoder.Decode(&data, r.PostForm)
 	if err != nil {
-		log.Fatalf("Failed to decode form with error: %v", err)
+		log.Printf("Failed to decode form with error: %v\n", err)
+		http.Error(w, "Failed to decode parameters", http.StatusInternalServerError)
+		return
 	}
 
 	addDataDatabase(data)
@@ -69,7 +76,12 @@ func PutDataPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// send respsonse
-	json.NewEncoder(w).Encode(&res)
+	err = json.NewEncoder(w).Encode(&res)
+	if err != nil {
+		log.Printf("Failed to encode response with error: %v\n", err)
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+		return
+	}
 
 	// log response
 	log.Printf("New entry %v added to database\n", data)
@@ -82,7 +94,9 @@ func PutDataGet(w http.ResponseWriter, r *http.Request) {
 
 	err := decoder.Decode(&data, r.URL.Query())
 	if err != nil {
-		log.Fatalf("Failed to decode parameters with error: %v", err)
+		log.Printf("Failed to decode parameters with error: %v\n", err)
+		http.Error(w, "Failed to decode parameters", http.StatusInternalServerError)
+		return
 	}
 
 	addDataDatabase(data)
@@ -93,7 +107,12 @@ func PutDataGet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// send respsonse
-	json.NewEncoder(w).Encode(&res)
+	err = json.NewEncoder(w).Encode(&res)
+	if err != nil {
+		log.Printf("Failed to encode response with error: %v\n", err)
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+		return
+	}
 
 	// log response
 	log.Printf("New entry %v added to database\n", data)
