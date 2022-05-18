@@ -8,7 +8,6 @@ Small web server written in golang with persistent data in postgresql database.
 * [Install](#install)
 * [Configuration file](#configuration-file)
 * [Run](#run)
-* [API Documentation](#api-documentation)
 * [API Usage](#api-usage)
 * [Built with](#build-with)
 
@@ -40,7 +39,6 @@ DB_NAME="car_data"
 DB_PASSWORD="password"
 ```
 
-
 ## Run
 
 To start postgresql and create database
@@ -53,26 +51,9 @@ Run web server
 go run main.go
 ```
 
-## API Documentation
+## API Testing
+Use [request.py](requests.py) to stress test the API
 
-TODO
-
-## API Usage
-You can find [demo.rest](demo.rest) in the root directoy with some request examples.  
-For further testing use `curl`.  
-Some examples:
-1. Insert data with POST request (using Form Data)
-```
-curl -X POST -F 'Latitude=387365578' -F 'Longitude=-91389050' -F 'Time=12:35:13' -F 'Speed=57' http://localhost:5000/put_data
-```
-2. Insert data with GET request
-```
-curl "http://localhost:5000/put_data?Latitude=387365578&Longitude=-91389050&Time=12:35:13&Speed=57"
-```
-3. Get Data with GET request
-```
-curl "http://localhost:5000/get_data"
-```
 
 ## Build with
 - [gorrila/mux](github.com/gorilla/mux) - HTTP router and URL matcher

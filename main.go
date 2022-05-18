@@ -31,9 +31,3 @@ func main() {
 		log.Fatalf("Failed to start server with error: %v\n",err)
 	}
 }
-
-// TODOS:
-// - When printing Data, gorm.Model appears null (ideally gorms.Model params dont show)
-// - Add documentation
-// OPTIONAL:
-// - Add tests

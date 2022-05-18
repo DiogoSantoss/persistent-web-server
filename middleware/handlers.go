@@ -3,8 +3,6 @@
 package middleware
 
 import (
-	"fmt"
-
 	"gitlab.com/psem/recruitment-software/diogosantoss/persistent-web-server/models"
 
 	"encoding/json"
@@ -13,9 +11,6 @@ import (
 
 	"github.com/gorilla/schema"
 )
-
-// Max size of form
-const MAX_FORM_SIZE = 1024
 
 // Decoder to transform form data into struct
 var decoder = schema.NewDecoder()
@@ -56,34 +51,14 @@ func PutDataPost(w http.ResponseWriter, r *http.Request) {
 
 	var data models.Data
 
-	fmt.Print(r.Header.Get("Content-Type"))
-
-	switch r.Header.Get("Content-Type") {
-
-		case "application/x-www-form-urlencoded":
-			err := r.ParseForm()
-			if err != nil {
-				log.Printf("Failed to parse form with error: %v\n", err)
-				http.Error(w, "Failed to parse form", http.StatusInternalServerError)
-				return
-			}
-
-		case "multipart/form-data":
-			err := r.ParseMultipartForm(MAX_FORM_SIZE) 
-			if err != nil {
-				log.Printf("Failed to parse form with error: %v\n", err)
-				http.Error(w, "Failed to parse form", http.StatusInternalServerError)
-				return
-			}
-
-		default:
-			log.Printf("Failed to parse form with error: Content-Type isn't multipart/form or application/x-www-form-urlencoded \n")
-			http.Error(w, "Failed to parse form", http.StatusBadRequest)
-			return
+	err := r.ParseForm()
+	if err != nil {
+		log.Printf("Failed to parse form with error: %v\n", err)
+		http.Error(w, "Failed to parse form", http.StatusInternalServerError)
+		return
 	}
 
-
-	err := decoder.Decode(&data, r.PostForm)
+	err = decoder.Decode(&data, r.PostForm)
 	if err != nil {
 		log.Printf("Failed to decode form with error: %v\n", err)
 		http.Error(w, "Failed to decode parameters", http.StatusInternalServerError)
