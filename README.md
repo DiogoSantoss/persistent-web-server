@@ -51,6 +51,59 @@ Run web server
 go run main.go
 ```
 
+## Run with Docker
+Create a network
+```
+docker network create go-postgres-network
+```
+
+Run the postgres container
+```
+docker run -d \
+-p 5432:5432 \
+-e POSTGRES_PASSWORD=password \
+--name postgredb \
+--net go-postgres-network \
+postgres
+```
+
+Create the database inside the container
+```
+docker ps
+docker exec -it 8c67db24bfcf bash
+psql -U postgres
+CREATE DATABASE car_data;
+```
+
+Build the go image
+```
+docker build . \
+-t go-postgres-server \
+--name go-webserver
+```
+
+Run the container
+```
+docker run -it \
+-p 8080:5000 \
+--network go-postgres-network \
+go-web-server
+```
+
+## Additional Docker commands
+List running containers
+```
+docker ps
+```
+List stored images
+```
+docker images
+```
+List networks
+```
+docker network ls
+```
+
 ## API Testing
 Use [request.py](requests.py) to stress test the API
 
