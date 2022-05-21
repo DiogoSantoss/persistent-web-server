@@ -32,7 +32,7 @@ func CreateConnection() *gorm.DB {
 	password := os.Getenv("DB_PASSWORD")
 
 	// Open connection to database
-	db, err = gorm.Open(dialect, "host="+host+" port="+port+" user="+user+" dbname="+dbName+" password="+password)
+	db, err = gorm.Open(dialect, "host="+host+" port="+port+" user="+user+" dbname="+dbName+" password="+password+" sslmode=disable")
 	if err != nil {
 		// If ssl error occurs, try disabling ssl
 		// by adding sslmode=disable to the connection string
