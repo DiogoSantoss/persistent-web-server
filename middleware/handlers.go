@@ -12,9 +12,6 @@ import (
 	"github.com/gorilla/schema"
 )
 
-// Max size of form
-const MAX_FORM_SIZE = 1024
-
 // Decoder to transform form data into struct
 var decoder = schema.NewDecoder()
 
