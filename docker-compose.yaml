@@ -1,0 +1,22 @@
+# lastest docker compose version
+version: '3.8'
+# all containers to be created
+services:
+  # container name
+  postgresdb:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=car_data # creates database
+    # volumes:
+  gowebserver:
+    image: go-postgres-server
+    ports:
+      # HOST:CONTAINER
+      - "5000:5000"
+    # start webserver after database is up
+    depends_on:
+      - postgresdb

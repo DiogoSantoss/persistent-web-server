@@ -5,6 +5,7 @@ import (
 
 	"log"
 	"os"
+	"time"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -31,15 +32,26 @@ func CreateConnection() *gorm.DB {
 	dbName := os.Getenv("DB_NAME")
 	password := os.Getenv("DB_PASSWORD")
 
-	// Open connection to database
-	db, err = gorm.Open(dialect, "host="+host+" port="+port+" user="+user+" dbname="+dbName+" password="+password+" sslmode=disable")
-	if err != nil {
-		// If ssl error occurs, try disabling ssl
-		// by adding sslmode=disable to the connection string
-		log.Fatal(err)
-	} else {
-		log.Println("Connected to database at " + host + ":" + port)
+
+	retries := 5
+	for i := 0; i < retries; i++ {
+		// Open connection to database
+		db, err = gorm.Open(dialect, "host="+host+" port="+port+" user="+user+" dbname="+dbName+" password="+password+" sslmode=disable")
+		if err != nil {
+			// If ssl error occurs, try disabling ssl
+			// by adding sslmode=disable to the connection string
+			if i == retries-1 {
+				log.Fatal("Error connecting to database with error: ", err)
+			}
+			log.Printf("Error connecting to database, retrying... (%v/%v)\n",i+1,retries)
+			// Wait for 1 second before retrying
+			time.Sleep(time.Second)
+		} else {
+			log.Println("Connected to database at " + host + ":" + port)
+			break
+		}
 	}
+
  
 	// Migrate the schema
 	db.AutoMigrate(&models.Data{})

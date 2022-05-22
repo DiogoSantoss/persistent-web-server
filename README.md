@@ -62,7 +62,7 @@ Run the postgres container
 docker run -d \
 -p 5432:5432 \
 -e POSTGRES_PASSWORD=password \
---name postgredb \
+--name postgresdb \
 --net go-postgres-network \
 postgres
 ```
@@ -78,8 +78,7 @@ CREATE DATABASE car_data;
 Build the go image
 ```
 docker build . \
--t go-postgres-server \
---name go-webserver
+-t go-postgres-server
 ```
 
 Run the container
@@ -88,6 +87,17 @@ docker run -it \
 -p 8080:5000 \
 --network go-postgres-network \
 go-web-server
+```
+
+## Run with Docker Compose
+
+Run the docker compose
+```
+docker-compose -f docker-compose.yaml up
+```
+To turn off
+```
+docker-compose -f docker-compose.yaml down
 ```
 
 ## Additional Docker commands
