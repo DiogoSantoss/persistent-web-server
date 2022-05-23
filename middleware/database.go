@@ -9,7 +9,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/joho/godotenv"
+	//"github.com/joho/godotenv"
 )
 
 // Global database connection
@@ -18,11 +18,16 @@ var db *gorm.DB
 // Create connection to database and migrate schema
 func CreateConnection() *gorm.DB {
 
+	/* 
+	This is no longer necessary because all env variables
+	are now set in the docker-compose file.
+
 	// Load .env file
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+	*/
 	
 	// Load env variables to local variables
 	dialect := os.Getenv("DIALECT")
@@ -31,15 +36,14 @@ func CreateConnection() *gorm.DB {
 	user := os.Getenv("DB_USER")
 	dbName := os.Getenv("DB_NAME")
 	password := os.Getenv("DB_PASSWORD")
-
+	
+	var err error
 
 	retries := 5
 	for i := 0; i < retries; i++ {
 		// Open connection to database
 		db, err = gorm.Open(dialect, "host="+host+" port="+port+" user="+user+" dbname="+dbName+" password="+password+" sslmode=disable")
 		if err != nil {
-			// If ssl error occurs, try disabling ssl
-			// by adding sslmode=disable to the connection string
 			if i == retries-1 {
 				log.Fatal("Error connecting to database with error: ", err)
 			}
