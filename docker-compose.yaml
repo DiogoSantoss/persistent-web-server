@@ -6,17 +6,34 @@ services:
   postgresdb:
     image: postgres
     ports:
+      # HOST:CONTAINER
       - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=car_data # creates database
-    # volumes:
+    # use volumes to allow data persistence
+    volumes:
+      # name of the volume:path on host
+      - postgres-data:/var/lib/postgresql/data
   gowebserver:
-    image: go-postgres-server
+    # build the image from the Dockerfile
+    build: .
+    # name of the created image
+    image: go-postgres-webserver
     ports:
-      # HOST:CONTAINER
       - "5000:5000"
+    environment:
+      - DIALECT=postgres
+      - DB_HOST=postgresdb
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=car_data
     # start webserver after database is up
     depends_on:
       - postgresdb
+
+volumes:
+  postgres-data:
+    driver: local
