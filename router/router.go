@@ -18,6 +18,8 @@ func CreateRouter() *mux.Router {
 	router.HandleFunc("/get_data", middleware.GetData).Methods("GET")
 	router.HandleFunc("/put_data", middleware.PutDataPost).Methods("POST")
 	router.HandleFunc("/put_data", middleware.PutDataGet).Methods("GET")
+	// Dummy route
+	router.HandleFunc("/fake", middleware.Dummy).Methods("GET")
 
 	return router
 }

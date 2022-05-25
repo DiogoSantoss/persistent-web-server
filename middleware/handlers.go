@@ -114,3 +114,20 @@ func PutDataGet(w http.ResponseWriter, r *http.Request) {
 	// log response
 	log.Printf("New entry %v added to database\n", data)
 }
+
+// Dummy handler to test middleware
+func Dummy(w http.ResponseWriter, r *http.Request) {
+	
+	res := "Hello world"
+
+	// send response
+	err := json.NewEncoder(w).Encode(&res)
+	if err != nil {
+		log.Printf("Failed to encode response with error: %v\n", err)
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+		return
+	}
+
+	// log response
+	log.Printf("Fake endpoint\n")
+}
