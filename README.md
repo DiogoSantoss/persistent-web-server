@@ -114,6 +114,14 @@ List networks
 docker network ls
 ```
 
+## Push Docker image to Gitlab
+
+```
+docker login registry.gitlab.com
+docker build -t registry.gitlab.com/psem/recruitment-software/diogosantoss/persistent-web-server .
+docker push registry.gitlab.com/psem/recruitment-software/diogosantoss/persistent-web-server
+```
+
 ## API Testing
 Use [request.py](requests.py) to stress test the API
 
