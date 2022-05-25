@@ -3,7 +3,7 @@ version: '3.8'
 # all containers to be created
 services:
   # container name
-  postgresdb:
+  db:
     image: postgres
     ports:
       # HOST:CONTAINER
@@ -16,7 +16,10 @@ services:
     volumes:
       # name of the volume:path on host
       - postgres-data:/var/lib/postgresql/data
-  gowebserver:
+  server:
+    # start webserver after database is up
+    depends_on:
+      - db
     # build the image from the Dockerfile
     build: .
     # name of the created image
@@ -25,14 +28,11 @@ services:
       - "5000:5000"
     environment:
       - DIALECT=postgres
-      - DB_HOST=postgresdb
+      - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=password
       - DB_NAME=car_data
-    # start webserver after database is up
-    depends_on:
-      - postgresdb
 
 volumes:
   postgres-data:
